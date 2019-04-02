@@ -8,7 +8,7 @@ gives that RG a `Name` tag with the value specified in the `rg_name` variable.
 Check out [test/terraform_azure_example_test.go](/test/terraform_azure_example_test.go) to see how you can write
 automated tests for this module.
 
-Note that the resources deployed in this module doesn't actually do anything; RGs are mainly abstract containers for
+Note that the resource deployed in this module doesn't actually do anything; RGs are mainly abstract containers for
 holding other resources, for organisation and compliance purposes. For slightly more complicated, real-world examples
 of Terraform modules, see [terraform-http-example](/examples/terraform-http-example) and
 [terraform-ssh-example](/examples/terraform-ssh-example).
