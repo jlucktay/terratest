@@ -17,9 +17,6 @@ func TestTerraformAzureExample(t *testing.T) {
 	// subscription.
 	expectedName := fmt.Sprintf("terratest-azure-example-%s", random.UniqueId())
 
-	// Pick a random Azure region to test in. This helps ensure your code works in all regions.
-	azRegion := azure.GetRandomRegion(t, nil, nil)
-
 	terraformOptions := &terraform.Options{
 		// The path to where our Terraform code is located.
 		TerraformDir: "../examples/terraform-azure-example",
@@ -41,6 +38,8 @@ func TestTerraformAzureExample(t *testing.T) {
 
 	// Run `terraform output` to get the value of an output variable.
 	resourceGroupID := terraform.Output(t, terraformOptions, "rg_id")
+
+	_ = azure.GetTagsForResourceGroup(t, resourceGroupID)
 
 	/*
 		aws.AddTagsToResource(t, awsRegion, instanceID, map[string]string{"testing": "testing-tag-value"})
