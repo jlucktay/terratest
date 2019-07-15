@@ -7,6 +7,7 @@ import (
 )
 
 var credsEnvVars = []string{
+	"GOOGLE_APPLICATION_CREDENTIALS",
 	"GOOGLE_CREDENTIALS",
 	"GOOGLE_CLOUD_KEYFILE_JSON",
 	"GCLOUD_KEYFILE_JSON",
@@ -27,6 +28,10 @@ var regionEnvVars = []string{
 	"CLOUDSDK_COMPUTE_REGION",
 }
 
+var googleIdentityEmailEnvVars = []string{
+	"GOOGLE_IDENTITY_EMAIL",
+}
+
 // GetGoogleCredentialsFromEnvVar returns the Credentials for use with testing.
 func GetGoogleCredentialsFromEnvVar(t *testing.T) string {
 	return environment.GetFirstNonEmptyEnvVarOrEmptyString(t, credsEnvVars)
@@ -40,4 +45,9 @@ func GetGoogleProjectIDFromEnvVar(t *testing.T) string {
 // GetGoogleRegionFromEnvVar returns the Region for use with testing.
 func GetGoogleRegionFromEnvVar(t *testing.T) string {
 	return environment.GetFirstNonEmptyEnvVarOrFatal(t, regionEnvVars)
+}
+
+// GetGoogleIdentityEmailEnvVar returns a Google identity (user) for use with testing.
+func GetGoogleIdentityEmailEnvVar(t *testing.T) string {
+	return environment.GetFirstNonEmptyEnvVarOrFatal(t, googleIdentityEmailEnvVars)
 }

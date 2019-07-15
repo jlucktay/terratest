@@ -26,7 +26,7 @@
   version = "v0.6.0"
 
 [[projects]]
-  digest = "1:0702d9e517405bc4eb634e3c7cf909b1da212bb5ce3cb633d1358bd2a7853d82"
+  digest = "1:980b777d47c47298a3bb4134f337ee6896fee8c85417878bec9cb1c78312ce26"
   name = "github.com/aws/aws-sdk-go"
   packages = [
     "aws",
@@ -64,7 +64,9 @@
     "service/acm",
     "service/autoscaling",
     "service/cloudwatchlogs",
+    "service/dynamodb",
     "service/ec2",
+    "service/ecs",
     "service/iam",
     "service/kms",
     "service/rds",
@@ -73,6 +75,7 @@
     "service/s3/s3manager",
     "service/sns",
     "service/sqs",
+    "service/ssm",
     "service/sts",
   ]
   pruneopts = "UT"
@@ -543,7 +546,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:a124d2ef8b444eee0f0bf419136052570947651dd738cf220b1cd1cea669ddc6"
+  digest = "1:57065bc4b99a833ed207371240f61c214ccbaedaa1ed6398484d3e32d2a0396f"
   name = "google.golang.org/api"
   packages = [
     "compute/v1",
@@ -554,6 +557,7 @@
     "internal",
     "iterator",
     "option",
+    "oslogin/v1",
     "storage/v1",
     "transport/http",
   ]
@@ -645,10 +649,10 @@
   version = "v2.2.1"
 
 [[projects]]
-  branch = "master"
-  digest = "1:bf61730197acc225b5153ba3eb3d7b87c01da71f98896d9855309f37be7743ca"
+  digest = "1:aa8baec3af7896083e40bdd77a8bb00c74a0ab9f29672b970ec6001b4daf3105"
   name = "k8s.io/api"
   packages = [
+    ".",
     "admissionregistration/v1alpha1",
     "admissionregistration/v1beta1",
     "apps/v1",
@@ -819,7 +823,9 @@
     "github.com/aws/aws-sdk-go/service/acm",
     "github.com/aws/aws-sdk-go/service/autoscaling",
     "github.com/aws/aws-sdk-go/service/cloudwatchlogs",
+    "github.com/aws/aws-sdk-go/service/dynamodb",
     "github.com/aws/aws-sdk-go/service/ec2",
+    "github.com/aws/aws-sdk-go/service/ecs",
     "github.com/aws/aws-sdk-go/service/iam",
     "github.com/aws/aws-sdk-go/service/kms",
     "github.com/aws/aws-sdk-go/service/rds",
@@ -827,6 +833,7 @@
     "github.com/aws/aws-sdk-go/service/s3/s3manager",
     "github.com/aws/aws-sdk-go/service/sns",
     "github.com/aws/aws-sdk-go/service/sqs",
+    "github.com/aws/aws-sdk-go/service/ssm",
     "github.com/aws/aws-sdk-go/service/sts",
     "github.com/ghodss/yaml",
     "github.com/go-sql-driver/mysql",
@@ -836,6 +843,7 @@
     "github.com/gruntwork-io/gruntwork-cli/errors",
     "github.com/gruntwork-io/gruntwork-cli/files",
     "github.com/gruntwork-io/gruntwork-cli/logging",
+    "github.com/json-iterator/go",
     "github.com/jstemmer/go-junit-report/formatter",
     "github.com/jstemmer/go-junit-report/parser",
     "github.com/magiconair/properties/assert",
@@ -854,9 +862,13 @@
     "golang.org/x/oauth2/google",
     "google.golang.org/api/compute/v1",
     "google.golang.org/api/iterator",
+    "google.golang.org/api/oslogin/v1",
+    "k8s.io/api",
     "k8s.io/api/apps/v1",
     "k8s.io/api/authorization/v1",
     "k8s.io/api/core/v1",
+    "k8s.io/api/extensions/v1beta1",
+    "k8s.io/api/rbac/v1",
     "k8s.io/apimachinery/pkg/apis/meta/v1",
     "k8s.io/client-go/kubernetes",
     "k8s.io/client-go/plugin/pkg/client/auth/gcp",
