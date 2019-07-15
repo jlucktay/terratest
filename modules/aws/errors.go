@@ -60,3 +60,42 @@ func (err AsgCapacityNotMetError) Error() string {
 func NewAsgCapacityNotMetError(asgName string, desiredCapacity int64, currentCapacity int64) AsgCapacityNotMetError {
 	return AsgCapacityNotMetError{asgName, desiredCapacity, currentCapacity}
 }
+
+// BucketVersioningNotEnabledError is returned when an S3 bucket that should have versioning does not have it applied
+type BucketVersioningNotEnabledError struct {
+	s3BucketName     string
+	awsRegion        string
+	versioningStatus string
+}
+
+func (err BucketVersioningNotEnabledError) Error() string {
+	return fmt.Sprintf(
+		"Versioning status for bucket %s in the %s region is %s",
+		err.s3BucketName,
+		err.awsRegion,
+		err.versioningStatus,
+	)
+}
+
+func NewBucketVersioningNotEnabledError(s3BucketName string, awsRegion string, versioningStatus string) BucketVersioningNotEnabledError {
+	return BucketVersioningNotEnabledError{s3BucketName: s3BucketName, awsRegion: awsRegion, versioningStatus: versioningStatus}
+}
+
+// NoBucketPolicyError is returned when an S3 bucket that should have a policy applied does not
+type NoBucketPolicyError struct {
+	s3BucketName string
+	awsRegion    string
+	bucketPolicy string
+}
+
+func (err NoBucketPolicyError) Error() string {
+	return fmt.Sprintf(
+		"The policy for bucket %s in the %s region does not have a policy attached.",
+		err.s3BucketName,
+		err.awsRegion,
+	)
+}
+
+func NewNoBucketPolicyError(s3BucketName string, awsRegion string, bucketPolicy string) NoBucketPolicyError {
+	return NoBucketPolicyError{s3BucketName: s3BucketName, awsRegion: awsRegion, bucketPolicy: bucketPolicy}
+}

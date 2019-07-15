@@ -2,7 +2,6 @@ package terraform
 
 import (
 	"fmt"
-	"strings"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/collections"
@@ -16,6 +15,15 @@ func GetCommonOptions(options *Options, args ...string) (*Options, []string) {
 	if options.NoColor && !collections.ListContains(args, "-no-color") {
 		args = append(args, "-no-color")
 	}
+
+	if options.TerraformBinary == "" {
+		options.TerraformBinary = "terraform"
+	}
+
+	if options.TerraformBinary == "terragrunt" {
+		args = append(args, "--terragrunt-non-interactive")
+	}
+
 	// if SshAgent is provided, override the local SSH agent with the socket of our in-process agent
 	if options.SshAgent != nil {
 		// Initialize EnvVars, if it hasn't been set yet
@@ -40,28 +48,35 @@ func RunTerraformCommand(t *testing.T, additionalOptions *Options, args ...strin
 func RunTerraformCommandE(t *testing.T, additionalOptions *Options, additionalArgs ...string) (string, error) {
 	options, args := GetCommonOptions(additionalOptions, additionalArgs...)
 
-	description := fmt.Sprintf("Running terraform %v", args)
-	return retry.DoWithRetryE(t, description, options.MaxRetries, options.TimeBetweenRetries, func() (string, error) {
-		cmd := shell.Command{
-			Command:    "terraform",
-			Args:       args,
-			WorkingDir: options.TerraformDir,
-			Env:        options.EnvVars,
-		}
+	cmd := shell.Command{
+		Command:           options.TerraformBinary,
+		Args:              args,
+		WorkingDir:        options.TerraformDir,
+		Env:               options.EnvVars,
+		OutputMaxLineSize: options.OutputMaxLineSize,
+	}
 
-		out, err := shell.RunCommandAndGetOutputE(t, cmd)
-		if err == nil {
-			return out, nil
-		}
+	description := fmt.Sprintf("%s %v", options.TerraformBinary, args)
+	return retry.DoWithRetryableErrorsE(t, description, options.RetryableTerraformErrors, options.MaxRetries, options.TimeBetweenRetries, func() (string, error) {
+		return shell.RunCommandAndGetOutputE(t, cmd)
+	})
+}
 
-		for errorText, errorMessage := range options.RetryableTerraformErrors {
-			if strings.Contains(out, errorText) {
-				logger.Logf(t, "terraform failed with the error '%s' but this error was expected and warrants a retry. Further details: %s\n", errorText, errorMessage)
-				return out, err
-			}
-		}
+// RunTerraformCommandAndGetStdoutE runs terraform with the given arguments and options and returns solely its stdout
+// (but not stderr).
+func RunTerraformCommandAndGetStdoutE(t *testing.T, additionalOptions *Options, additionalArgs ...string) (string, error) {
+	options, args := GetCommonOptions(additionalOptions, additionalArgs...)
 
-		return out, retry.FatalError{Underlying: err}
+	cmd := shell.Command{
+		Command:    options.TerraformBinary,
+		Args:       args,
+		WorkingDir: options.TerraformDir,
+		Env:        options.EnvVars,
+	}
+
+	description := fmt.Sprintf("%s %v", options.TerraformBinary, args)
+	return retry.DoWithRetryableErrorsE(t, description, options.RetryableTerraformErrors, options.MaxRetries, options.TimeBetweenRetries, func() (string, error) {
+		return shell.RunCommandAndGetStdOutE(t, cmd)
 	})
 }
 
@@ -78,12 +93,13 @@ func GetExitCodeForTerraformCommand(t *testing.T, additionalOptions *Options, ar
 func GetExitCodeForTerraformCommandE(t *testing.T, additionalOptions *Options, additionalArgs ...string) (int, error) {
 	options, args := GetCommonOptions(additionalOptions, additionalArgs...)
 
-	logger.Log(t, "Running terraform %v", args)
+	logger.Logf(t, "Running %s with args %v", options.TerraformBinary, args)
 	cmd := shell.Command{
-		Command:    "terraform",
-		Args:       args,
-		WorkingDir: options.TerraformDir,
-		Env:        options.EnvVars,
+		Command:           options.TerraformBinary,
+		Args:              args,
+		WorkingDir:        options.TerraformDir,
+		Env:               options.EnvVars,
+		OutputMaxLineSize: options.OutputMaxLineSize,
 	}
 
 	_, err := shell.RunCommandAndGetOutputE(t, cmd)

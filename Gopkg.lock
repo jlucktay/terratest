@@ -104,6 +104,7 @@
     "service/acm",
     "service/autoscaling",
     "service/cloudwatchlogs",
+    "service/dynamodb",
     "service/ec2",
     "service/ecs",
     "service/iam",
@@ -114,6 +115,7 @@
     "service/s3/s3manager",
     "service/sns",
     "service/sqs",
+    "service/ssm",
     "service/sts",
   ]
   pruneopts = "UT"
@@ -703,6 +705,7 @@
     "internal",
     "iterator",
     "option",
+    "oslogin/v1",
     "storage/v1",
     "support/bundler",
     "transport/http",
@@ -797,10 +800,10 @@
   version = "v2.2.1"
 
 [[projects]]
-  branch = "master"
-  digest = "1:bf61730197acc225b5153ba3eb3d7b87c01da71f98896d9855309f37be7743ca"
+  digest = "1:aa8baec3af7896083e40bdd77a8bb00c74a0ab9f29672b970ec6001b4daf3105"
   name = "k8s.io/api"
   packages = [
+    ".",
     "admissionregistration/v1alpha1",
     "admissionregistration/v1beta1",
     "apps/v1",
@@ -977,6 +980,7 @@
     "github.com/aws/aws-sdk-go/service/acm",
     "github.com/aws/aws-sdk-go/service/autoscaling",
     "github.com/aws/aws-sdk-go/service/cloudwatchlogs",
+    "github.com/aws/aws-sdk-go/service/dynamodb",
     "github.com/aws/aws-sdk-go/service/ec2",
     "github.com/aws/aws-sdk-go/service/ecs",
     "github.com/aws/aws-sdk-go/service/iam",
@@ -986,6 +990,7 @@
     "github.com/aws/aws-sdk-go/service/s3/s3manager",
     "github.com/aws/aws-sdk-go/service/sns",
     "github.com/aws/aws-sdk-go/service/sqs",
+    "github.com/aws/aws-sdk-go/service/ssm",
     "github.com/aws/aws-sdk-go/service/sts",
     "github.com/ghodss/yaml",
     "github.com/go-sql-driver/mysql",
@@ -1034,6 +1039,8 @@
     "golang.org/x/oauth2/google",
     "google.golang.org/api/compute/v1",
     "google.golang.org/api/iterator",
+    "google.golang.org/api/oslogin/v1",
+    "k8s.io/api",
     "k8s.io/api/apps/v1",
     "k8s.io/api/authorization/v1",
     "k8s.io/api/core/v1",
