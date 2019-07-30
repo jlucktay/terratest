@@ -8,17 +8,18 @@
 package helm
 
 import (
+	"crypto/tls"
 	"fmt"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	http_helper "github.com/gruntwork-io/terratest/modules/http-helper"
 	"github.com/gruntwork-io/terratest/modules/k8s"
 	"github.com/gruntwork-io/terratest/modules/random"
-	"gotest.tools/assert"
 )
 
 // Test that we can install and upgrade a remote chart (e.g stable/chartmuseum)
@@ -93,9 +94,14 @@ func TestRemoteChartInstallAndUpgrade(t *testing.T) {
 	k8s.WaitUntilServiceAvailable(t, kubectlOptions, serviceName, 10, 1*time.Second)
 	service := k8s.GetService(t, kubectlOptions, serviceName)
 	endpoint := k8s.GetServiceEndpoint(t, kubectlOptions, service, 8080)
+
+	// Setup a TLS configuration to submit with the helper, a blank struct is acceptable
+	tlsConfig := tls.Config{}
+
 	http_helper.HttpGetWithRetryWithCustomValidation(
 		t,
 		fmt.Sprintf("http://%s", endpoint),
+		&tlsConfig,
 		30,
 		10*time.Second,
 		func(statusCode int, body string) bool {
